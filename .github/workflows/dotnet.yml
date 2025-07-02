@@ -5,10 +5,10 @@ name: Build and Test .NET Application
 on:
   # Se ejecuta cada vez que haces un 'push' a la rama 'main'
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   # También se ejecuta cuando se crea un 'pull request' hacia 'main'
   pull_request:
-    branches: [ "main" ]
+    branches: [ "master" ]
 
 jobs:
   build:
