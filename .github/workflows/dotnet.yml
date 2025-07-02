@@ -1,0 +1,41 @@
+# Nombre del workflow, aparecerá en la pestaña "Actions" de GitHub
+name: Build and Test .NET Application
+
+# Define cuándo se ejecutará este workflow
+on:
+  # Se ejecuta cada vez que haces un 'push' a la rama 'main'
+  push:
+    branches: [ "main" ]
+  # También se ejecuta cuando se crea un 'pull request' hacia 'main'
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    # El tipo de máquina virtual donde se ejecutará el trabajo
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Clona tu repositorio en la máquina virtual
+    - name: Check out code
+      uses: actions/checkout@v4
+
+    # 2. Configura el entorno de .NET 8
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    # 3. Restaura las dependencias (instala los paquetes NuGet)
+    - name: Restore dependencies
+      run: dotnet restore ./Reporteria.API/Reporteria.API.csproj
+
+    # 4. Compila el proyecto en modo Release
+    - name: Build application
+      run: dotnet build ./Reporteria.API/Reporteria.API.csproj --configuration Release --no-restore
+
+    # 5. Publica la aplicación (prepara los archivos para el despliegue)
+    # Este paso es opcional aquí porque Render lo hará por su cuenta, 
+    # pero es una buena práctica para verificar que el proyecto es publicable.
+    - name: Publish application
+      run: dotnet publish ./Reporteria.API/Reporteria.API.csproj --configuration Release --no-build --output ./publish_output
