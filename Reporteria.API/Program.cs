@@ -19,11 +19,16 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+// HEMOS QUITADO EL if (app.Environment.IsDevelopment())
+// Ahora Swagger se activará siempre.
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(); 
-}
+    // Esta línea es opcional, pero hace que Swagger sea la página de inicio
+    // para que no tengas que escribir /swagger manualmente.
+    c.RoutePrefix = string.Empty; 
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Reporteria API V1");
+});
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
